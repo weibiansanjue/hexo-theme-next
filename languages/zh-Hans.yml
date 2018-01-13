@@ -7,11 +7,11 @@ title:
 author: 博主
 
 menu:
-  home: 首页
-  archives: 归档
-  categories: 分类
-  tags: 标签
-  about: 关于
+  about: 韦
+  categories: 编
+  tags: 三
+  archives: 绝
+  home: 主页
   search: 搜索
   schedule: 日程表
   sitemap: 站点地图
@@ -33,8 +33,7 @@ post:
   visitors: 阅读次数
   wordcount: 字数统计
   min2read: 阅读时长
-  totalcount: 站点总字数
-  totaltime: 站点总阅读时间
+  totalcount: Site words total count
   copyright:
     author: 本文作者
     link: 本文链接

@@ -10,10 +10,6 @@
     {% set post_class = post_class + ' ' + 'post-sticky' %}
   {% endif %}
 
-  {% if theme.reading_progress.enable %}
-    <div class="reading-progress-bar"></div>
-  {% endif %}
-
   <article class="{{ post_class }}" itemscope itemtype="http://schema.org/Article">
   {##################}
   {### POST BLOCK ###}
@@ -73,9 +69,9 @@
               {% if theme.post_meta.item_text %}
                 <span class="post-meta-item-text">{{ __('post.posted') }}</span>
               {% endif %}
-              <time title="{{ __('post.created') }}" itemprop="dateCreated datePublished" datetime="{{ moment(post.date).format() }}">{#
-              #}{{ date(post.date, config.date_format) }}{#
-            #}</time>
+              <time title="{{ __('post.created') }}" itemprop="dateCreated datePublished" datetime="{{ moment(post.date).format() }}">
+                {{ date(post.date, config.date_format) }}
+              </time>
             {% endif %}
 
             {% if theme.post_meta.created_at and theme.post_meta.updated_at %}
@@ -89,9 +85,9 @@
               {% if theme.post_meta.item_text %}
                 <span class="post-meta-item-text">{{ __('post.modified') }}&#58;</span>
               {% endif %}
-              <time title="{{ __('post.modified') }}" itemprop="dateModified" datetime="{{ moment(post.updated).format() }}">{#
-              #}{{ date(post.updated, config.date_format) }}{#
-            #}</time>
+              <time title="{{ __('post.modified') }}" itemprop="dateModified" datetime="{{ moment(post.updated).format() }}">
+                {{ date(post.updated, config.date_format) }}
+              </time>
             {% endif %}
           </span>
 
@@ -122,7 +118,17 @@
           {% endif %}
 
           {% if post.comments %}
-            {% if theme.facebook_comments_plugin.enable %}
+            {% if (theme.duoshuo and theme.duoshuo.shortname) or theme.duoshuo_shortname %}
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="{{ url_for(post.path) }}#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="{{ post.path }}" itemprop="commentCount"></span>
+                </a>
+              </span>
+            {% elseif theme.facebook_comments_plugin.enable %}
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
                 <span class="post-meta-item-icon">
@@ -214,38 +220,37 @@
             </span>
           {% endif %}
 
-          {% if config.symbols_count_time.symbols or config.symbols_count_time.time %}
+          {% if theme.post_wordcount.wordcount or theme.post_wordcount.min2read %}
             <div class="post-wordcount">
-              {% if not theme.symbols_count_time.separated_meta %}
-                <span class="post-meta-divider">|</span>
-              {% endif %}
-
-              {% if config.symbols_count_time.symbols %}
+              {% if theme.post_wordcount.wordcount %}
+                {% if not theme.post_wordcount.separated_meta %}
+                  <span class="post-meta-divider">|</span>
+                {% endif %}
                 <span class="post-meta-item-icon">
                   <i class="fa fa-file-word-o"></i>
                 </span>
-                {% if theme.symbols_count_time.item_text_post %}
+                {% if theme.post_wordcount.item_text %}
                   <span class="post-meta-item-text">{{ __('post.wordcount') }}&#58;</span>
                 {% endif %}
-                <span title="{{ __('post.wordcount') }}">{#
-                #}{{ symbolsCount(post.content) }}{#
-              #}</span>
+                <span title="{{ __('post.wordcount') }}">
+                  {{ wordcount(post.content) }}
+                </span>
               {% endif %}
 
-              {% if config.symbols_count_time.symbols and config.symbols_count_time.time %}
+              {% if theme.post_wordcount.wordcount and theme.post_wordcount.min2read %}
                 <span class="post-meta-divider">|</span>
               {% endif %}
 
-              {% if config.symbols_count_time.time %}
+              {% if theme.post_wordcount.min2read %}
                 <span class="post-meta-item-icon">
                   <i class="fa fa-clock-o"></i>
                 </span>
-                {% if theme.symbols_count_time.item_text_post %}
+                {% if theme.post_wordcount.item_text %}
                   <span class="post-meta-item-text">{{ __('post.min2read') }} &asymp;</span>
                 {% endif %}
-                <span title="{{ __('post.min2read') }}">{#
-                #}{{ symbolsTime(post.content, theme.symbols_count_time.awl, theme.symbols_count_time.wpm) }}{#
-              #}</span>
+                <span title="{{ __('post.min2read') }}">
+                  {{ min2read(post.content) }}
+                </span>
               {% endif %}
             </div>
           {% endif %}
@@ -351,7 +356,20 @@
       {% if post.tags and post.tags.length and not is_index %}
         <div class="post-tags">
           {% for tag in post.tags %}
-            <a href="{{ url_for(tag.path) }}" rel="tag"># {{ tag.name }}</a>
+            <a href="{{ url_for(tag.path) }}" rel="tag">
+
+	    	{% if tag.name == 'Blog' %}
+	    		<i class="fa fa-file-text"></i> 
+	    	{% endif %}
+	    	{% if tag.name == 'Podcast' %}
+	    		<i class="fa fa-podcast"></i> 
+	    	{% endif %}
+	    	{% if tag.name == 'Vlog' %}
+	    		<i class="fa fa-video-camera"></i> 
+	    	{% endif %}
+
+	    	{{ tag.name }}
+	    </a>
           {% endfor %}
         </div>
       {% endif %}
