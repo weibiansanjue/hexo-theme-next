@@ -98,7 +98,8 @@ menu:
   #home: / || user
   categories: /categories/ || th
   tags: /tags/ || ellipsis-h
-  archives: /archives/ || thumbs-up
+  #archives: /archives/ || thumbs-up
+  archives: /categories/绝/ || thumbs-up
   #schedule: /schedule/ || calendar
   #sitemap: /sitemap.xml || sitemap
   #commonweal: /404/ || heartbeat
